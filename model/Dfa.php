@@ -50,4 +50,3 @@ class dfa
         $this->alphabet[]=$alphabet;
     }
 }
-?>

@@ -1,8 +1,10 @@
 <?php
+
 require ('../model/Dfa.php');
 require ('../model/State.php');
 require ('StateImpl.php');
 require('../exception/InvalidDfa.php');
+
 class DfaImpl{
     /**
      * @throws InvalidDfa
