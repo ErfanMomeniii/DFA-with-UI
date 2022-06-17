@@ -33,8 +33,45 @@ class DfaImpl{
             }
         }
     }
+    /**
+     * @return bool
+     */
+    public static function dfs(Dfa $dfa,State $root,$count,$word){
+        if($count==count($word) && $root->isFinalState()){
+            return true;
+        }
 
+        if($count==$count($word)){
+            return false;
+        }
+
+        $currentChar=$word[$count];
+
+        foreach ($root->getRelations() as $index => $value){
+            foreach ($value as $state => $alphabet) {
+                if($alphabet===$currentChar){
+                    return self::dfs($dfa,self::findStateByName($dfa,$state),$count+1,$word);
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * @return State
+     */
+    public static function findStateByName(Dfa $dfa,$name){
+        foreach ($dfa->getStates() as $index => $state){
+            if($state->name===$name){
+                return $state;
+            }
+        }
+        return null;
+    }
+    /**
+     * @return bool
+     */
     public static function checkWordExists(Dfa $dfa, $word){
+        return self::dfs($dfa,self::getStartState($dfa),0,$word);
     }
     /**
      * @return bool
