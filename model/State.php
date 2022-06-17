@@ -1,9 +1,10 @@
 <?php
-class State
+class state
 {
     private $name;
     private $isFinalState = false;
     private $isStartState=false;
+    private $relations=[];
 
     /**
      * @return bool
@@ -51,5 +52,35 @@ class State
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @param state $state
+     * @param $alphabet
+     */
+    public function addRelations(State $state,$alphabet){
+        $this->relations[]=[$state->name=>$alphabet];
+    }
+
+    /**
+     * @param state $state
+     * @param $alphabet
+     */
+    public function deleteRelations(State $state,$alphabet){
+        foreach ($this->relations as $index => $value){
+            if(isset($value[$state])){
+                if($value[$state]==$alphabet){
+                    unset($this->relations[$index]);
+                }
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getRelations()
+    {
+        return $this->relations;
     }
 }

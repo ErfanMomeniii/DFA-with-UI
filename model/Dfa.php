@@ -1,5 +1,5 @@
 <?php
-class Dfa
+class dfa
 {
     public $alphabet = [];
     public $states = [];
@@ -37,9 +37,9 @@ class Dfa
     }
 
     /**
-     * @param State $state
+     * @param state $state
      */
-    public function addState(State $state){
+    public function addState(state $state){
         $this->states[]=$state;
     }
 
