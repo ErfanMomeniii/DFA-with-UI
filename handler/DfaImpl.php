@@ -1,7 +1,6 @@
 <?php
 
 require ('../model/Dfa.php');
-require ('../model/State.php');
 require ('StateImpl.php');
 require('../exception/InvalidDfa.php');
 
@@ -15,8 +14,10 @@ class DfaImpl{
 
         $relation_count=0;
 
-        if(!self::hasStartState($dfa) || !self::hasFinalState($dfa) || self::hasSeveralStartState($dfa)){
-            throw new InvalidDfa();
+        if((!self::hasStartState($dfa)) || (!self::hasFinalState($dfa)) || (self::hasSeveralStartState($dfa))){
+            $e=(new InvalidDfa());
+            $e->setMessage('YOUR DFA HAS PROBLEM');
+            throw $e;
         }
 
         foreach ($states as $index => $value){
@@ -24,12 +25,16 @@ class DfaImpl{
         }
 
         if($relation_count != count($alphabet) * count($states)){
-            throw new InvalidDfa();
+             $e=(new InvalidDfa());
+             $e->setMessage('YOUR DFA HAS NOT SPECIFIC COUNT FOR ALPHABET');
+             throw $e;
         }
 
         foreach($states as $index => $value){
             if(!StateImpl::checkAlphabetsExists($value,$alphabet)){
-                throw new InvalidDfa();
+                $e=(new InvalidDfa());
+                $e->setMessage('AT LEAST ONE NODE NOT HAVE ALL ALPHABET');
+                throw $e;
             }
         }
     }
@@ -37,17 +42,18 @@ class DfaImpl{
      * @return bool
      */
     public static function dfs(Dfa $dfa,State $root,$count,$word){
-        if($count==count($word) && $root->isFinalState()){
+        if($count==strlen($word) && $root->isFinalState()){
             return true;
         }
-
-        if($count==$count($word)){
+        if($count==strlen($word)){
             return false;
         }
 
-        $currentChar=$word[$count];
+        $currentChar=substr($word,$count,1);
+        $relations=$root->getRelations();
 
-        foreach ($root->getRelations() as $index => $value){
+        foreach ($relations as $index => $value){
+
             foreach ($value as $state => $alphabet) {
                 if($alphabet===$currentChar){
                     return self::dfs($dfa,self::findStateByName($dfa,$state),$count+1,$word);
@@ -61,7 +67,7 @@ class DfaImpl{
      */
     public static function findStateByName(Dfa $dfa,$name){
         foreach ($dfa->getStates() as $index => $state){
-            if($state->name===$name){
+            if($state->getName()===$name){
                 return $state;
             }
         }
@@ -118,7 +124,8 @@ class DfaImpl{
         if(!self::hasStartState($dfa)){
             return null;
         }
-        foreach ($dfa->getStates() as $index => $state){
+        $states=$dfa->getStates();
+        foreach ($states as $index => $state){
             if($state->isStartState()){
                 return $state;
             }

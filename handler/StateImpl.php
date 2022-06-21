@@ -10,13 +10,10 @@ class StateImpl
     public static function countRelations(State $state)
     {
         $count = 0;
-        foreach ($state->getRelations() as $index => $value) {
+        $relations=$state->getRelations();
+        foreach ($relations as $index => $value) {
             foreach ($value as $index2 => $value2) {
-                if ($state->getName() == $index2) {
-                    $count += 2;
-                } else {
                     $count++;
-                }
             }
         }
         return $count;

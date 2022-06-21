@@ -1,5 +1,5 @@
 <?php
-class dfa
+class Dfa
 {
     public $alphabet = [];
     public $states = [];

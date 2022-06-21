@@ -1,11 +1,24 @@
 <?php
-
-class state
+class State
 {
     private $name;
     private $isFinalState = false;
     private $isStartState=false;
     private $relations=[];
+
+    /**
+     * @param $name
+     * @param bool $isFinalState
+     * @param bool $isStartState
+     * @param array $relations
+     */
+    public function __construct($name, $isFinalState, $isStartState, array $relations)
+    {
+        $this->name = $name;
+        $this->isFinalState = $isFinalState;
+        $this->isStartState = $isStartState;
+        $this->relations = $relations;
+    }
 
     /**
      * @return bool
